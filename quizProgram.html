@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+p {
+  text-align: center;
+  font-size: 60px;
+  margin-top:0px;
+}
+</style>
+</head>
+<body>
+
+<p id="demo"></p>
+
+<script>
+// Set the date we're counting down to
+var countDownDate = new Date("Sep 5, 2018 15:37:25").getTime();
+
+// Update the count down every 1 second
+var x = setInterval(function() {
+
+    // Get todays date and time
+    var now = new Date().getTime();
+    
+    // Find the distance between now an the count down date
+    var distance = countDownDate - now;
+    
+    // Time calculations for days, hours, minutes and seconds
+    
+    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    
+    // Output the result in an element with id="demo"
+    document.getElementById("demo").innerHTML = seconds + "s ";
+    
+    // If the count down is over, write some text 
+    if (distance < 0) {
+        clearInterval(x);
+        document.getElementById("demo").innerHTML = "EXPIRED";
+    }
+}, 1000);
+</script>
+
+</body>
+</html>
+
+<html >
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+	<body>
+	<!-- Need to have a ng-app, ng-controller names should be the same-->
+	<div ng-app="onlineQuizExamApp" ng-controller="formCtrl">
+ 
+  		<form>
+   		Q1. What is the 1+1 ?
+		<!--- The answer is a type of text, and the ng-model will bind the input to my answer1 variable which is created in AngularJS -->
+    	<input type="text" ng-model="answer1">
+		<!-- With the each question, I will display a validation message whether it is correct or wrong -->
+	 <div ng-show="showAnswer1">{{msg1}} </div>
+  
+  <div >
+	<form>
+	 <!-- Another form for second question-->
+      Q2. What is the 1-1 ?
+    <input type="text" ng-model="answer2">
+    <div ng-show="showAnswer2">{{msg2}} </div>
+	 <!-- After all the 2 questions, we have to have the submit button, inorder to verify the answers, and display scores-->
+	<input type="submit" ng-click="getAnswer()">
+  </form>
+<script>
+
+var app = angular.module('onlineQuizExamApp', []);
+app.controller('formCtrl', function($scope, $http) {
+$scope.answer1 = "";
+$scope.answer2 = "";
+$scope.showAnswer = false;
+$scope.getAnswer = function(){
+	//  Connecing to db to get the answer1 and answer2 into the result1 and result2
+	/*
+	For creating the table
+	 create table questions(
+  	 answer1 varchar(20),
+  	 answer2 varchar(20),     
+  	 qid int NOT NULL,
+  	 PRIMARY KEY(qid));
+	
+	Inorder to connect to the php, I have installed /Applications/XAMPP/xamppfiles/htdocs/project1/testing.php
+	<?php 
+	$servername = "localhost";
+	$username = "root";
+	$password = " ";
+
+	// Create connection
+	$conn = mysqli_connect($servername, $username, $password);
+
+	// Check connection
+	if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+	}
+	echo "Connected successfully";
+	?>
+	*/
+    $scope.result1 = "2";
+	$scope.result2 = "0";
+	if($scope.answer1 ==  $scope.result1){
+      $scope.showAnswer1 = true;
+      $scope.msg1 = "Correct Answer :) ";
+     }else{
+    	$scope.msg1 = "Wrong Answer :( ";
+      }
+
+	if ($scope.answer2 ==  $scope.result2){
+      	$scope.showAnswer2 = true;
+		$scope.msg2 = "Correct Answer :) ";
+   }else{
+	$scope.msg2 = "Wrong Answer :( ";
+      //$scope.showAnswer2 = true;
+   }
+}
+});
+</script>
+ 
+</body>
+</html>
